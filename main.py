@@ -1,6 +1,7 @@
 import arcade
 import random
 from game_state import GameState
+from health_bar import HealthBar
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -25,23 +26,41 @@ class MyGame(arcade.Window):
         self.player()
         self.ennemy()
 
+        self.health_bar = HealthBar(30, 500, 250, 50, 100)
+
     def player(self):
         self.playerV.hp = 20
         self.playerV.weapon = 5
         self.playerV.armor = 3
+        arcade.draw_text("player",
+                         30,
+                         SCREEN_HEIGHT - DEFAULT_LINE_HEIGHT *3,
+                         arcade.color.WHITE_SMOKE,
+                         45,
+                         width=SCREEN_WIDTH,
+                         align="left")
 
 
     def ennemy(self):
         self.ennemyV.hp = 40
         self.ennemyV.weapon = 10
         self.ennemyV.armor = 1
+        arcade.draw_text("ennemy",
+                         1035,
+                         SCREEN_HEIGHT - DEFAULT_LINE_HEIGHT * 3,
+                         arcade.color.WHITE_SMOKE,
+                         45,
+                         width=SCREEN_WIDTH,
+                         align="left")
 
     def attack(self):
-        self.choice1 = arcade.draw_text("attack", 250, 210, arcade.color.AO, 50, 10)
-        self.choice1
+        self.choice1 = arcade.create_text_sprite("attack", 250, 210, arcade.color.AO, 50)
+        self.choice1.draw()
+
 
     def prepare(self):
-        pass
+        self.choice2 = arcade.create_text_sprite("prepare", 770, 210, arcade.color.AO, 50)
+        self.choice2.draw()
 
     def setup(self):
         if self.game_state == GameState.NOT_STARTED:
@@ -53,17 +72,19 @@ class MyGame(arcade.Window):
                             width=SCREEN_WIDTH,
                             align="center")
         arcade.draw_rectangle_outline(380, 230, 500, 100, arcade.color.DARK_RED, 5, 0)
-        arcade.draw_text("prepare", 770, 210, arcade.color.AO, 50, 10)
         arcade.draw_rectangle_outline(900, 230, 500, 100, arcade.color.DARK_RED, 5, 0)
         self.attack()
+        self.prepare()
         arcade.draw_rectangle_outline(380, 110, 500, 100, arcade.color.DARK_RED, 5, 0)
         arcade.draw_rectangle_outline(900, 110, 500, 100, arcade.color.DARK_RED, 5, 0)
 
 
-    def on_draw(self):
+    def on_draw(self,):
         arcade.start_render()
         self.setup()
         self.player()
+        self.ennemy()
+        self.health_bar.draw()
 
 
 
@@ -79,7 +100,10 @@ class MyGame(arcade.Window):
     def on_mouse_press(self, x, y, button, key_modifiers):
 
         if self.choice1.collides_with_point((x, y)):
-            print("lol")
+            print("attack")
+            self.health_bar.hp -= 10
+        elif self.choice2.collides_with_point((x, y)):
+            print("prepare")
 
 
 def main():
