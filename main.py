@@ -10,7 +10,7 @@ DEFAULT_LINE_HEIGHT = 45
 class personnage:
 
     def __init__(self):
-        self.hp = 0
+        #self.hp = 0
         self.weapon = 0
         self.armor = 0
 
@@ -23,13 +23,15 @@ class MyGame(arcade.Window):
         self.game_state = GameState.NOT_STARTED
         self.playerV = personnage()
         self.ennemyV = personnage()
+        self.playerV = HealthBar(30, 500, 250, 50, 100)
+        self.ennemyV = HealthBar(1000, 500, 250, 50, 100)
         self.player()
         self.ennemy()
 
-        self.health_bar = HealthBar(30, 500, 250, 50, 100)
+        #self.health_bar = HealthBar(30, 500, 250, 50, 100)
 
     def player(self):
-        self.playerV.hp = 20
+        #self.playerV.hp = 20
         self.playerV.weapon = 5
         self.playerV.armor = 3
         arcade.draw_text("player",
@@ -39,19 +41,21 @@ class MyGame(arcade.Window):
                          45,
                          width=SCREEN_WIDTH,
                          align="left")
+        self.playerV.draw()
 
 
     def ennemy(self):
-        self.ennemyV.hp = 40
+        #self.ennemyV.hp = 40
         self.ennemyV.weapon = 10
         self.ennemyV.armor = 1
         arcade.draw_text("ennemy",
-                         1035,
+                         1035 ,
                          SCREEN_HEIGHT - DEFAULT_LINE_HEIGHT * 3,
                          arcade.color.WHITE_SMOKE,
                          45,
                          width=SCREEN_WIDTH,
                          align="left")
+        self.ennemyV.draw()
 
     def attack(self):
         self.choice1 = arcade.create_text_sprite("attack", 250, 210, arcade.color.AO, 50)
@@ -84,7 +88,7 @@ class MyGame(arcade.Window):
         self.setup()
         self.player()
         self.ennemy()
-        self.health_bar.draw()
+        #self.health_bar.draw()
 
 
 
@@ -101,7 +105,7 @@ class MyGame(arcade.Window):
 
         if self.choice1.collides_with_point((x, y)):
             print("attack")
-            self.health_bar.hp -= 10
+            self.ennemyV.hp -= 10
         elif self.choice2.collides_with_point((x, y)):
             print("prepare")
 
