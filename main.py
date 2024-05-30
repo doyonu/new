@@ -10,7 +10,6 @@ DEFAULT_LINE_HEIGHT = 45
 class personnage:
 
     def __init__(self):
-        #self.hp = 0
         self.weapon = 0
         self.armor = 0
 
@@ -27,12 +26,14 @@ class MyGame(arcade.Window):
         self.ennemyV = HealthBar(1000, 500, 250, 50, 100)
         self.player()
         self.ennemy()
+        self.player_choice = 0
+        self.ennemy_choice = 0
 
         #self.health_bar = HealthBar(30, 500, 250, 50, 100)
 
     def player(self):
-        #self.playerV.hp = 20
-        self.playerV.weapon = 5
+        self.playerV.max_hp = 120
+        self.playerV.weapon = 10
         self.playerV.armor = 3
         arcade.draw_text("player",
                          30,
@@ -45,8 +46,8 @@ class MyGame(arcade.Window):
 
 
     def ennemy(self):
-        #self.ennemyV.hp = 40
-        self.ennemyV.weapon = 10
+        self.ennemyV.max_hp = 100
+        self.ennemyV.weapon = 15
         self.ennemyV.armor = 1
         arcade.draw_text("ennemy",
                          1035 ,
@@ -56,6 +57,18 @@ class MyGame(arcade.Window):
                          width=SCREEN_WIDTH,
                          align="left")
         self.ennemyV.draw()
+
+        if self.game_state == GameState.ROUND_ENNEMY:
+            if self.player_choice == 1:
+                R = random.randint(1,2)
+                if R == 1:
+                    self.ennemy_choice = 1
+                else:
+                    self.ennemy_choice = 2
+            else:
+                self.ennemy_choice = 1
+
+
 
     def attack(self):
         self.choice1 = arcade.create_text_sprite("attack", 250, 210, arcade.color.AO, 50)
@@ -83,6 +96,8 @@ class MyGame(arcade.Window):
         arcade.draw_rectangle_outline(900, 110, 500, 100, arcade.color.DARK_RED, 5, 0)
 
 
+
+
     def on_draw(self,):
         arcade.start_render()
         self.setup()
@@ -95,19 +110,26 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.SPACE:
             if self.game_state == GameState.NOT_STARTED:
-               self.game_state = GameState.ROUND_ACTIVE
-            elif self.game_state == GameState.ROUND_ACTIVE:
-                self.game_state = GameState.ROUND_DONE
-            elif self.game_state == GameState.GAME_OVER:
-                self.game_state = GameState.ROUND_ACTIVE
+               self.game_state = GameState.ROUND_PLAYER
+            #elif self.game_state == GameState.ROUND_PLAYER:
+                #self.game_state = GameState.ROUND_ENNEMY
+            #elif self.game_state == GameState.ROUND_ENNEMY:
+                #self.game_state = GameState.GAME_OVER
+            #elif self.game_state == GameState.GAME_OVER:
+                #self.game_state = GameState.ROUND_PLAYER
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
         if self.choice1.collides_with_point((x, y)):
-            print("attack")
-            self.ennemyV.hp -= 10
+            #print("attack")
+            #print(self.ennemyV.hp)
+            self.ennemyV.hp -= self.playerV.weapon - self.ennemyV.armor
+            self.player_choice = 1
         elif self.choice2.collides_with_point((x, y)):
-            print("prepare")
+            #print("prepare")
+            self.ennemy_choice = 2
+        self.game_state = GameState.ROUND_ENNEMY
+
 
 
 def main():
