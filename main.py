@@ -7,11 +7,6 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 DEFAULT_LINE_HEIGHT = 45
 
-class personnage:
-
-    def __init__(self):
-        self.weapon = 0
-        self.armor = 0
 
 class MyGame(arcade.Window):
 
@@ -20,9 +15,9 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.color.BLACK_OLIVE)
         self.game_state = GameState.NOT_STARTED
-        self.playerV = personnage()
-        self.ennemyV = personnage()
-        self.playerV = HealthBar(30, 500, 250, 50, 100)
+        #self.player()
+        #self.ennemy()
+        self.playerV = HealthBar(30, 500, 250, 50, 120)
         self.ennemyV = HealthBar(1000, 500, 250, 50, 100)
         self.player()
         self.ennemy()
